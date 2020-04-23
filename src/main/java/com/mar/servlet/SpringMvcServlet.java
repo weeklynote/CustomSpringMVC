@@ -102,10 +102,30 @@ public class SpringMvcServlet extends HttpServlet {
                         final MySecurity security = method.getAnnotation(MySecurity.class);
                         final String[] methodSecuritys = security.value();
                         if(methodSecuritys != null && methodSecuritys.length > 0){
-                            handler.setSecurities(methodSecuritys);
+                            if (securitys != null && securitys.length > 0) {
+                                // 取Controller与Handler方法权限的交集
+                                List<String> newSecurity = new ArrayList<>(8);
+                                for (String s : securitys) {
+                                    for (String methodSecurity : methodSecuritys) {
+                                        if (StringUtils.equals(s, methodSecurity)){
+                                            newSecurity.add(s);
+                                        }
+                                    }
+                                }
+                                if (newSecurity.size() > 0){
+                                    String[] strings = new String[newSecurity.size()];
+                                    handler.setSecurities(newSecurity.toArray(strings));
+                                }else {
+                                    handler.setSecurities(new String[]{});
+                                }
+                            }else {
+                                handler.setSecurities(methodSecuritys);
+                            }
                         }else {
                             handler.setSecurities(securitys);
                         }
+                    }else {
+                        handler.setSecurities(securitys);
                     }
                     handlerMapping.add(handler);
                 }

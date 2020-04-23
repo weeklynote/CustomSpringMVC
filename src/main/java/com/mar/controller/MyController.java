@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 @MvcController
 @MvcRequestMapping("/test")
+@MySecurity(value = {"lisi", "zhangsan"})
 public class MyController {
 
     @MvcAutoWired
@@ -38,6 +39,14 @@ public class MyController {
     @MySecurity(value = {"zhangsan"})
     @MvcRequestMapping("/queryV3")
     public String queryV3(HttpServletRequest request, HttpServletResponse response, String username){
+        final String s = demoService.get(username);
+        System.err.println("MyController queryV2:" + username);
+        return s;
+    }
+
+    @MySecurity(value = {"wangwu"})
+    @MvcRequestMapping("/queryV4")
+    public String queryV4(HttpServletRequest request, HttpServletResponse response, String username){
         final String s = demoService.get(username);
         System.err.println("MyController queryV2:" + username);
         return s;
