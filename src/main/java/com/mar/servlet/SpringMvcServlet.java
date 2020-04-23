@@ -116,7 +116,7 @@ public class SpringMvcServlet extends HttpServlet {
                                     String[] strings = new String[newSecurity.size()];
                                     handler.setSecurities(newSecurity.toArray(strings));
                                 }else {
-                                    handler.setSecurities(new String[]{});
+                                    handler.setSecurities(null);
                                 }
                             }else {
                                 handler.setSecurities(methodSecuritys);

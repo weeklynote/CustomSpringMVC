@@ -19,7 +19,17 @@ public class PermissionInterceptor implements Interceptor {
     public boolean intercept(HttpServletRequest req, HttpServletResponse resp, Handler handler) {
         final String[] securities = handler.getSecurities();
         final String name = req.getParameter(NAME);
-        if (securities != null && securities.length > 0){
+        if (securities == null){
+            try {
+                // 处理中文乱码
+                resp.setHeader("Content-type", "text/html;charset=UTF-8");
+                resp.getWriter().write("Permission Denied!");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return true;
+        }
+        if (securities.length > 0){
             for (String security : securities) {
                 if (StringUtils.equals(security, name)){
                     return false;
